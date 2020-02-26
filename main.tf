@@ -1,7 +1,3 @@
-provider "azurerm" {
-  version = "=1.44.0"
-}
-
 module "ssh-key" {
   source         = "./modules/ssh-key"
   public_ssh_key = var.public_ssh_key == "" ? "" : var.public_ssh_key
