@@ -32,6 +32,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
     max_count             = lookup(var.default_node_pool, "max_count", null)
     node_count            = lookup(var.default_node_pool, "node_count", null)
     orchestrator_version  = local.kubernetes_version
+    mode                  = lookup(var.default_node_pool, "mode", "User")
   }
 
   service_principal {

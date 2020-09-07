@@ -61,6 +61,7 @@ variable default_node_pool {
     min_count: null
     max_count: null
     node_count: null
+    mode: "User"
   }
 }
 
