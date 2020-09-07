@@ -5,6 +5,7 @@ module "ssh-key" {
 
 data "azurerm_kubernetes_service_versions" "current" {
   location = var.resource_group["location"]
+  include_preview = var.k8s_version_include_preview
 }
 
 locals {

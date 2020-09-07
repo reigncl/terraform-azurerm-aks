@@ -6,6 +6,11 @@ variable resource_group {
   })
 }
 
+variable k8s_version_include_preview {
+  type = bool
+  default = false
+}
+
 variable resource_prefix_name {
   description = "The prefix for the resources created in the specified Azure Resource Group"
 }
