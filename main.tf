@@ -31,6 +31,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
     min_count             = lookup(var.default_node_pool, "min_count", null)
     max_count             = lookup(var.default_node_pool, "max_count", null)
     node_count            = lookup(var.default_node_pool, "node_count", null)
+    orchestrator_version  = local.kubernetes_version
   }
 
   service_principal {
