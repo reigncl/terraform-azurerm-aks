@@ -4,7 +4,7 @@ module "ssh-key" {
 }
 
 data "azurerm_kubernetes_service_versions" "current" {
-  location = var.resource_group["location"]
+  location        = var.resource_group["location"]
   include_preview = var.k8s_version_include_preview
 }
 
@@ -39,8 +39,8 @@ resource "azurerm_kubernetes_cluster" "primary" {
     client_secret = var.client_secret
   }
 
-  dns_prefix          = var.resource_prefix_name
-  kubernetes_version  = local.kubernetes_version
+  dns_prefix         = var.resource_prefix_name
+  kubernetes_version = local.kubernetes_version
 
   linux_profile {
     admin_username = var.admin_username
@@ -53,7 +53,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
 
   addon_profile {
     aci_connector_linux {
-      enabled = var.addon_profile.aci_connector_linux.enabled
+      enabled     = var.addon_profile.aci_connector_linux.enabled
       subnet_name = var.addon_profile.aci_connector_linux.subnet_name
     }
 
@@ -80,11 +80,11 @@ resource "azurerm_kubernetes_cluster" "primary" {
   }
 
   network_profile {
-    network_plugin = lookup(var.network_profile, "network_plugin", null)
-    network_policy = lookup(var.network_profile, "network_policy", null)
-    dns_service_ip = lookup(var.network_profile, "network_policy", null)
-    pod_cidr = lookup(var.network_profile, "pod_cidr", null)
-    service_cidr = lookup(var.network_profile, "service_cidr", null)
+    network_plugin    = lookup(var.network_profile, "network_plugin", null)
+    network_policy    = lookup(var.network_profile, "network_policy", null)
+    dns_service_ip    = lookup(var.network_profile, "network_policy", null)
+    pod_cidr          = lookup(var.network_profile, "pod_cidr", null)
+    service_cidr      = lookup(var.network_profile, "service_cidr", null)
     load_balancer_sku = lookup(var.network_profile, "load_balancer_sku", "basic")
   }
 
