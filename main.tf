@@ -17,6 +17,9 @@ resource "azurerm_kubernetes_cluster" "primary" {
   location            = var.resource_group["location"]
   resource_group_name = var.resource_group["name"]
 
+  automatic_channel_upgrade       = defaults(var.automatic_channel_upgrade, "none")
+  api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
+
   default_node_pool {
     name                  = lookup(var.default_node_pool, "name", "default")
     vm_size               = lookup(var.default_node_pool, "vm_size", "Standard_DS2_v2")
@@ -73,6 +76,14 @@ resource "azurerm_kubernetes_cluster" "primary" {
       enabled                    = var.addon_profile.oms_agent.enabled
       log_analytics_workspace_id = lookup(var.addon_profile.oms_agent, "log_analytics_workspace_id", azurerm_log_analytics_workspace.main.id)
     }
+
+    ingress_application_gateway {
+      enabled      = lookup(var.addon_profile.ingress_application_gateway, "enabled", "false")
+      gateway_id   = lookup(var.addon_profile.ingress_application_gateway, "gateway_id", null)
+      gateway_name = lookup(var.addon_profile.ingress_application_gateway, "gateway_name", null)
+      subnet_cidr  = lookup(var.addon_profile.ingress_application_gateway, "subnet_cidr", null)
+      subnet_id    = lookup(var.addon_profile.ingress_application_gateway, "subnet_id", null)
+    }
   }
 
   role_based_access_control {
@@ -103,8 +114,8 @@ resource "random_id" "workspace" {
 
 resource "azurerm_log_analytics_workspace" "main" {
   name                = "${var.resource_prefix_name}-${random_id.workspace.hex}-workspace"
-  location            = var.resource_group["location"]
-  resource_group_name = var.resource_group["name"]
+  location            = var.resource_group.location
+  resource_group_name = var.resource_group.name
   sku                 = var.log_analytics_workspace_sku
   retention_in_days   = var.log_retention_in_days
   tags                = var.tags
@@ -112,8 +123,8 @@ resource "azurerm_log_analytics_workspace" "main" {
 
 resource "azurerm_log_analytics_solution" "main" {
   solution_name         = "ContainerInsights"
-  location              = var.resource_group["location"]
-  resource_group_name   = var.resource_group["name"]
+  location              = var.resource_group.location
+  resource_group_name   = var.resource_group.name
   workspace_resource_id = azurerm_log_analytics_workspace.main.id
   workspace_name        = azurerm_log_analytics_workspace.main.name
 
@@ -121,4 +132,6 @@ resource "azurerm_log_analytics_solution" "main" {
     publisher = "Microsoft"
     product   = "OMSGallery/ContainerInsights"
   }
+
+  tags = var.tags
 }

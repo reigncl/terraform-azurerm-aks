@@ -112,6 +112,9 @@ variable "addon_profile" {
     oms_agent = {
       enabled = true
     }
+    ingress_application_gateway = {
+      enabled = false
+    }
   }
 }
 
@@ -127,9 +130,21 @@ variable "network_profile" {
   description = "Network profile block, more information https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#network_profile"
 }
 
+variable "automatic_channel_upgrade" {
+  type        = string
+  default     = "none"
+  description = "(Optional) The upgrade channel for this Kubernetes Cluster. Possible values are patch, rapid, node-image and stable, Default at None"
+}
+
+
+variable "api_server_authorized_ip_ranges" {
+  type        = string
+  description = "(Optional) The IP ranges to allow for incoming traffic to the server nodes."
+  default     = ""
+}
+
 variable "tags" {
   default     = {}
   description = "Any tags that should be present on the Virtual Network resources"
   type        = map(string)
 }
-
