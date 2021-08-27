@@ -17,7 +17,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
   location            = var.resource_group["location"]
   resource_group_name = var.resource_group["name"]
 
-  automatic_channel_upgrade       = defaults(var.automatic_channel_upgrade, "none")
+  automatic_channel_upgrade       = var.automatic_channel_upgrade
   api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
 
   default_node_pool {

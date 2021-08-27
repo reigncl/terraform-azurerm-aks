@@ -138,9 +138,9 @@ variable "automatic_channel_upgrade" {
 
 
 variable "api_server_authorized_ip_ranges" {
-  type        = string
+  type        = list(string)
   description = "(Optional) The IP ranges to allow for incoming traffic to the server nodes."
-  default     = ""
+  default     = []
 }
 
 variable "tags" {
