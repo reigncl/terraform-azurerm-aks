@@ -46,21 +46,21 @@ variable "kubernetes_version" {
 # max_pods: max count of node
 # More information about node count and cidr ranges, visit https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni
 variable "default_node_pool" {
-  type = map(string)
+  type = any
   default = {
-    name : "default"
-    vm_size : "Standard_DS2_v2"
-    availability_zones : ""
-    enable_auto_scaling : false
-    enable_node_public_ip : false
-    max_pods : null
-    node_taints : ""
-    os_disk_size_gb : ""
-    type : ""
-    vnet_subnet_id : ""
-    min_count : null
-    max_count : null
-    node_count : null
+    name                  = "default"
+    vm_size               = "Standard_DS2_v2"
+    availability_zones    = ""
+    enable_auto_scaling   = false
+    enable_node_public_ip = false
+    max_pods              = null
+    os_disk_size_gb       = ""
+    node_taints           = []
+    type                  = ""
+    vnet_subnet_id        = ""
+    min_count             = null
+    max_count             = null
+    node_count            = null
   }
 }
 
@@ -129,13 +129,6 @@ variable "network_profile" {
   type        = map(string)
   description = "Network profile block, more information https://www.terraform.io/docs/providers/azurerm/r/kubernetes_cluster.html#network_profile"
 }
-
-variable "automatic_channel_upgrade" {
-  type        = string
-  default     = "none"
-  description = "(Optional) The upgrade channel for this Kubernetes Cluster. Possible values are patch, rapid, node-image and stable, Default at None"
-}
-
 
 variable "api_server_authorized_ip_ranges" {
   type        = list(string)

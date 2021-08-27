@@ -17,7 +17,6 @@ resource "azurerm_kubernetes_cluster" "primary" {
   location            = var.resource_group["location"]
   resource_group_name = var.resource_group["name"]
 
-  automatic_channel_upgrade       = var.automatic_channel_upgrade
   api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
 
   default_node_pool {
@@ -26,7 +25,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
     availability_zones    = split(",", lookup(var.default_node_pool, "availability_zones", ""))
     enable_auto_scaling   = lookup(var.default_node_pool, "enable_auto_scaling", false)
     enable_node_public_ip = lookup(var.default_node_pool, "enable_node_public_ip", false)
-    node_taints           = split(",", lookup(var.default_node_pool, "node_taints", ""))
+    node_taints           = lookup(var.default_node_pool, "node_taints", [])
     os_disk_size_gb       = lookup(var.default_node_pool, "os_disk_size_gb", null)
     type                  = lookup(var.default_node_pool, "type", null)
     vnet_subnet_id        = lookup(var.default_node_pool, "vnet_subnet_id", null)
