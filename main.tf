@@ -12,7 +12,7 @@ locals {
   kubernetes_version           = coalesce(var.kubernetes_version, data.azurerm_kubernetes_service_versions.current.latest_version)
   cluster_name                 = var.custom_cluster_name == "" ? "${var.resource_prefix_name}-aks" : var.custom_cluster_name
   resource_prefix_name         = var.custom_cluster_name == "" ? var.resource_prefix_name : var.custom_cluster_name
-  log_analytics_workspace_name = var.custom_log_analytics_workspace_name != "" ? "${var.resource_prefix_name}-${random_id.workspace.hex}-workspace" : var.custom_log_analytics_workspace
+  log_analytics_workspace_name = var.custom_log_analytics_workspace_name == "" ? "${var.resource_prefix_name}-${random_id.workspace.hex}-workspace" : var.custom_log_analytics_workspace_name
 }
 
 resource "azurerm_kubernetes_cluster" "primary" {
