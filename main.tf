@@ -9,11 +9,14 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 locals {
-  kubernetes_version = coalesce(var.kubernetes_version, data.azurerm_kubernetes_service_versions.current.latest_version)
+  kubernetes_version           = coalesce(var.kubernetes_version, data.azurerm_kubernetes_service_versions.current.latest_version)
+  cluster_name                 = var.custom_cluster_name == "" ? "${var.resource_prefix_name}-aks" : var.custom_cluster_name
+  resource_prefix_name         = var.custom_cluster_name == "" ? var.resource_prefix_name : var.custom_cluster_name
+  log_analytics_workspace_name = var.custom_log_analytics_workspace_name != "" ? "${var.resource_prefix_name}-${random_id.workspace.hex}-workspace" : var.custom_log_analytics_workspace
 }
 
 resource "azurerm_kubernetes_cluster" "primary" {
-  name                = "${var.resource_prefix_name}-aks"
+  name                = local.cluster_name
   location            = var.resource_group["location"]
   resource_group_name = var.resource_group["name"]
 
@@ -41,7 +44,7 @@ resource "azurerm_kubernetes_cluster" "primary" {
     client_secret = var.client_secret
   }
 
-  dns_prefix         = var.resource_prefix_name
+  dns_prefix         = local.resource_prefix_name
   kubernetes_version = local.kubernetes_version
 
   linux_profile {
@@ -112,7 +115,7 @@ resource "random_id" "workspace" {
 
 
 resource "azurerm_log_analytics_workspace" "main" {
-  name                = "${var.resource_prefix_name}-${random_id.workspace.hex}-workspace"
+  name                = local.log_analytics_workspace_name
   location            = var.resource_group.location
   resource_group_name = var.resource_group.name
   sku                 = var.log_analytics_workspace_sku

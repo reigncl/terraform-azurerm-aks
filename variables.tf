@@ -13,6 +13,7 @@ variable "k8s_version_include_preview" {
 
 variable "resource_prefix_name" {
   description = "The prefix for the resources created in the specified Azure Resource Group"
+  default     = ""
 }
 
 variable "log_analytics_workspace_sku" {
@@ -140,4 +141,17 @@ variable "tags" {
   default     = {}
   description = "Any tags that should be present on the Virtual Network resources"
   type        = map(string)
+}
+
+# CUSTOM NAME
+variable "custom_cluster_name" {
+  type        = string
+  default     = ""
+  description = "The custom cluster name"
+}
+
+variable "custom_log_analytics_workspace_name" {
+  type        = string
+  default     = ""
+  description = "The custom log analytics workspace"
 }
